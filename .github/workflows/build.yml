@@ -20,15 +20,21 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.24.5
+          flutter-version: 3.19.6
           channel: stable
 
-      - name: Create Flutter scaffold & inject sources
+      - name: Create Flutter scaffold
         run: |
           flutter create --org com.bleapp --project-name ble_app tmp_project
+
+      - name: Inject source files
+        run: |
           cp -f pubspec.yaml tmp_project/pubspec.yaml
           cp -f lib/*.dart tmp_project/lib/
-          cat > tmp_project/android/app/src/main/AndroidManifest.xml << 'MANIFEST'
+
+      - name: Fix AndroidManifest
+        run: |
+          cat > tmp_project/android/app/src/main/AndroidManifest.xml << 'EOF'
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
               <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30"/>
@@ -57,7 +63,7 @@ jobs:
                   <meta-data android:name="flutterEmbedding" android:value="2"/>
               </application>
           </manifest>
-          MANIFEST
+          EOF
 
       - name: Get dependencies
         run: cd tmp_project && flutter pub get
@@ -65,7 +71,7 @@ jobs:
       - name: Build APK
         run: cd tmp_project && flutter build apk --release --no-tree-shake-icons
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: BLE-App-Release
