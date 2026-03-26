@@ -1,0 +1,73 @@
+name: Build BLE APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.24.5
+          channel: stable
+
+      - name: Create Flutter scaffold & inject sources
+        run: |
+          flutter create --org com.bleapp --project-name ble_app tmp_project
+          cp -f pubspec.yaml tmp_project/pubspec.yaml
+          cp -f lib/*.dart tmp_project/lib/
+          cat > tmp_project/android/app/src/main/AndroidManifest.xml << 'MANIFEST'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
+              <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30"/>
+              <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+              <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+              <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+              <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+              <application
+                  android:label="BLE调试工具"
+                  android:name="${applicationName}"
+                  android:icon="@mipmap/ic_launcher">
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true"
+                      android:launchMode="singleTop"
+                      android:theme="@style/LaunchTheme"
+                      android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+                      android:hardwareAccelerated="true"
+                      android:windowSoftInputMode="adjustResize">
+                      <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@style/NormalTheme"/>
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN"/>
+                          <category android:name="android.intent.category.LAUNCHER"/>
+                      </intent-filter>
+                  </activity>
+                  <meta-data android:name="flutterEmbedding" android:value="2"/>
+              </application>
+          </manifest>
+          MANIFEST
+
+      - name: Get dependencies
+        run: cd tmp_project && flutter pub get
+
+      - name: Build APK
+        run: cd tmp_project && flutter build apk --release --no-tree-shake-icons
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BLE-App-Release
+          path: tmp_project/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
