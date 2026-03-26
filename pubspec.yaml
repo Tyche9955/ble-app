@@ -1,0 +1,16 @@
+name: ble_app
+description: BLE 蓝牙连接调试工具
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_blue_plus: ^1.31.15
+  permission_handler: ^11.3.0
+  provider: ^6.1.2
+
+flutter:
+  uses-material-design: true
