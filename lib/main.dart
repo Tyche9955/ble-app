@@ -1,33 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'ble_manager.dart';
+import 'car_manager.dart';
 import 'scan_screen.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(create: (_) => BleManager(), child: const MyApp()));
+  runApp(ChangeNotifierProvider(create: (_) => CarManager(), child: const CarApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CarApp extends StatelessWidget {
+  const CarApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'nRF BLE Tool',
+      title: 'BLE 灏忚溅鎺у埗',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF121212),
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF1A1A2E),
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF00A9CE),
-          secondary: Color(0xFF00A9CE),
-          surface: Color(0xFF1E1E1E),
+          primary: Color(0xFFE94560),
+          secondary: Color(0xFF0F3460),
+          surface: Color(0xFF16213E),
         ),
-        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF1E1E1E), elevation: 0),
-        cardTheme: CardTheme(color: const Color(0xFF1E1E1E), elevation: 0),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true, fillColor: const Color(0xFF2A2A2A),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: BorderSide.none),
-        ),
+        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF16213E)),
       ),
       home: const ScanScreen(),
     );
