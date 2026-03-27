@@ -42,7 +42,6 @@ class ScanScreen extends StatelessWidget {
         ],
       ),
       body: Column(children:[
-        // Connected devices bar
         if (ble.connectedDevices.isNotEmpty)
           Container(color:const Color(0xFF1A3A1A),padding:const EdgeInsets.symmetric(horizontal:16,vertical:8),
             child:Row(children:[
@@ -59,7 +58,6 @@ class ScanScreen extends StatelessWidget {
                 ))),
             ])),
 
-        // Scan control
         Container(color:const Color(0xFF1E1E1E),padding:const EdgeInsets.all(12),
           child:Column(children:[
             Row(children:[
@@ -67,7 +65,6 @@ class ScanScreen extends StatelessWidget {
                 Text(ble.isScanning?'扫描中...':'${ble.filteredResults.length} 台设备',style:const TextStyle(color:Colors.white,fontWeight:FontWeight.w500,fontSize:15)),
                 Text(ble.isScanning?'正在搜索 BLE 设备':'点击设备连接',style:const TextStyle(color:Colors.grey,fontSize:12)),
               ])),
-              // Filter
               SizedBox(width:120,child:TextField(
                 onChanged:ble.setScanFilter,
                 style:const TextStyle(color:Colors.white,fontSize:13),
@@ -84,21 +81,17 @@ class ScanScreen extends StatelessWidget {
                   decoration:BoxDecoration(color:ble.isScanning?const Color(0xFF3A3A3A):const Color(0xFF00A9CE),borderRadius:BorderRadius.circular(20)),
                   child:Text(ble.isScanning?'停止':'扫描',style:const TextStyle(color:Colors.white,fontWeight:FontWeight.bold,fontSize:13))),
               ),
-            ])),
+            ]),
             const SizedBox(height:8),
-            // Filter chips
             Row(children:[
               _filterChip('全部', ble.scanFilter.isEmpty, ()=>ble.setScanFilter('')),
               const SizedBox(width:8),
               _filterChip('已连接', false, (){}),
-              const SizedBox(width:8),
-              _filterChip('新设备', false, (){}),
             ]),
           ])),
 
         const Divider(height:1,color:Color(0xFF2A2A2A)),
 
-        // Device list
         Expanded(child:ble.filteredResults.isEmpty
           ?Center(child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[
               Icon(Icons.bluetooth_searching,size:56,color:Colors.grey.shade700),
@@ -107,7 +100,7 @@ class ScanScreen extends StatelessWidget {
             ]))
           :ListView.separated(
             itemCount:ble.filteredResults.length,
-            separatorBuilder:(_,__)=>const Divider(height:1,color:Color(0xFF2A2A2A),indent:16),
+            separatorBuilder:(_,__)=> const Divider(height:1,color:Color(0xFF2A2A2A),indent:16),
             itemBuilder:(ctx,i){
               final r=ble.filteredResults[i];
               final name=r.device.localName.isEmpty?'未知设备':r.device.localName;
@@ -122,12 +115,11 @@ class ScanScreen extends StatelessWidget {
                     Navigator.push(ctx,MaterialPageRoute(builder:(_)=>DeviceScreen(devId:id)));
                   }else{
                     final ok=await ble.connect(r.device);
-                    if(ok)if(ctx.mounted)Navigator.push(ctx,MaterialPageRoute(builder:(_)=>DeviceScreen(devId:id)));
+                    if(ok && ctx.mounted) Navigator.push(ctx,MaterialPageRoute(builder:(_)=>DeviceScreen(devId:id)));
                   }
                 },
                 child:Container(color:const Color(0xFF1E1E1E),padding:const EdgeInsets.symmetric(horizontal:16,vertical:10),
                   child:Row(children:[
-                    // RSSI bars
                     SizedBox(width:30,height:28,child:Column(mainAxisAlignment:MainAxisAlignment.end,children:List.generate(4,(j)=>Container(width:5,height:5+j*5,margin:const EdgeInsets.only(top:1),
                       decoration:BoxDecoration(color:j<bars?rc:const Color(0xFF3A3A3A),borderRadius:BorderRadius.circular(1)))))),
                     const SizedBox(width:12),
@@ -141,14 +133,10 @@ class ScanScreen extends StatelessWidget {
                       ]),
                       const SizedBox(height:2),
                       Text(id,style:const TextStyle(color:Color(0xFF6B7280),fontSize:11,fontFamily:'monospace')),
-                      if(r.advertisementData.serviceUuids.isNotEmpty)
-                        Padding(padding:const EdgeInsets.only(top:2),
-                          child:Text(r.advertisementData.serviceUuids.take(3).map((u)=>u.toString().substring(0,8)).join(', '),
-                            style:const TextStyle(color:Color(0xFF00A9CE),fontSize:10,fontFamily:'monospace'),maxLines:1,overflow:TextOverflow.ellipsis)),
                     ])),
                     Column(crossAxisAlignment:CrossAxisAlignment.end,children:[
                       Text('${r.rssi}',style:TextStyle(color:rc,fontWeight:FontWeight.bold,fontSize:14)),
-                      const Text('dBm',style:TextStyle(color:Colors.grey.shade600,fontSize:10)),
+                      Text('dBm',style:TextStyle(color:Colors.grey.shade600,fontSize:10)),
                     ]),
                     const SizedBox(width:8),
                     Icon(isConn?Icons.chevron_right:Icons.add_circle_outline,color:isConn?const Color(0xFF00A9CE):Colors.grey.shade600,size:20),
