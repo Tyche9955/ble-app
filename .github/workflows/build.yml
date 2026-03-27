@@ -1,4 +1,4 @@
-name: Build BLE App
+﻿name: Build BLE App
 
 on:
   push:
@@ -24,17 +24,11 @@ jobs:
           channel: stable
 
       - name: Create project
-        run: flutter create --org com.bleapp --project-name ble_app app
-
-      - name: Copy source files
         run: |
+          flutter create --org com.bleapp --project-name ble_app app
           cp pubspec.yaml app/pubspec.yaml
-          cp main.dart app/lib/main.dart
-          cp ble_manager.dart app/lib/ble_manager.dart
-          cp scan_screen.dart app/lib/scan_screen.dart
-          cp device_screen.dart app/lib/device_screen.dart
-          mkdir -p app/android/app/src/main
-          cp AndroidManifest.xml app/android/app/src/main/AndroidManifest.xml
+          cp lib/*.dart app/lib/
+          cp android/app/src/main/AndroidManifest.xml app/android/app/src/main/AndroidManifest.xml
 
       - name: Get dependencies
         run: cd app && flutter pub get
