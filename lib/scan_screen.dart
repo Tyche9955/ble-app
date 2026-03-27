@@ -24,7 +24,7 @@ class ScanScreen extends StatelessWidget {
         title: Row(children:[
           Container(width:10, height:10, decoration: BoxDecoration(color:Color(0xFFE94560), shape:BoxShape.circle)),
           SizedBox(width:8),
-          Text('BLE\u8f66\u63a7', style: TextStyle(color:Colors.white, fontWeight:FontWeight.w600, fontSize:18)),
+          Text('BLE\u5c0f\u8f66\u63a7\u5236', style: TextStyle(color:Colors.white, fontWeight:FontWeight.w600, fontSize:18)),
         ]),
       ),
       body: car.isConnected
@@ -36,9 +36,9 @@ class ScanScreen extends StatelessWidget {
               child: Column(children:[
                 Row(children:[
                   Expanded(child: Column(crossAxisAlignment:CrossAxisAlignment.start, children:[
-                    Text(car.isScanning ? '\u626b\u63cf\u4e2d...' : car.devices.length.toString() + '\u53f0\u8bbe\u5907',
+                    Text(car.isScanning ? '\u626b\u63cf\u4e2d...' : car.devices.length.toString() + ' \u53f0\u8bbe\u5907',
                       style: TextStyle(color:Colors.white, fontWeight:FontWeight.w500, fontSize:15)),
-                    Text(car.isScanning ? '\u6b63\u5728\u641c\u7d22' : '\u70b9\u51fb\u8fde\u63a5',
+                    Text(car.isScanning ? '\u6b63\u5728\u641c\u7d22\u8bbe\u5907' : '\u70b9\u51fb\u8fde\u63a5\u8bbe\u5907',
                       style: TextStyle(color:Colors.grey, fontSize:12)),
                   ])),
                   GestureDetector(
@@ -54,7 +54,8 @@ class ScanScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25),
                       ),
                       child: Row(children:[
-                        if (car.isScanning) SizedBox(width:16, height:16, child: CircularProgressIndicator(strokeWidth:2, color:Colors.white)),
+                        if (car.isScanning)
+                          SizedBox(width:16, height:16, child: CircularProgressIndicator(strokeWidth:2, color:Colors.white)),
                         if (car.isScanning) SizedBox(width:6),
                         Text(car.isScanning ? '\u505c\u6b62' : '\u626b\u63cf', style: TextStyle(color:Colors.white, fontWeight:FontWeight.bold)),
                       ]),
@@ -80,15 +81,15 @@ class ScanScreen extends StatelessWidget {
               ? Center(child: Column(mainAxisAlignment:MainAxisAlignment.center, children:[
                   Icon(Icons.bluetooth_searching, size:60, color:Colors.grey.shade600),
                   SizedBox(height:12),
-                  Text(car.isScanning ? '\u626b\u63cf\u4e2d...' : '\u672a\u53d1\u73b0',
+                  Text(car.isScanning ? '\u626b\u63cf\u4e2d...' : '\u672a\u53d1\u73b0\u8bbe\u5907',
                     style: TextStyle(color:Colors.grey.shade500, fontSize:15)),
                 ]))
               : ListView.separated(
                 itemCount: car.devices.length,
-                separatorBuilder:(_,_) => Divider(height:1, color:Color(0xFF0F3460)),
+                separatorBuilder: (ctx, idx) => Divider(height:1, color:Color(0xFF0F3460)),
                 itemBuilder: (ctx, i) {
                   final r = car.devices[i];
-                  final name = r.device.localName.isEmpty ? '\u672a\u77e5' : r.device.localName;
+                  final name = r.device.localName.isEmpty ? '\u672a\u77e5\u8bbe\u5907' : r.device.localName;
                   final rc = rssiColor(r.rssi);
                   return InkWell(
                     onTap: () async {
