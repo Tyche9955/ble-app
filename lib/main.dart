@@ -4,26 +4,25 @@ import 'car_manager.dart';
 import 'scan_screen.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(create: (_) => CarManager(), child: const CarApp()));
+  runApp(ChangeNotifierProvider(create: (_) => CarManager(), child: CarApp()));
 }
 
 class CarApp extends StatelessWidget {
-  const CarApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BLE 灏忚溅鎺у埗',
+      title: 'BLE\u5c0f\u8f66\u63a7\u5236',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF1A1A2E),
-        colorScheme: const ColorScheme.dark(
+        scaffoldBackgroundColor: Color(0xFF1A1A2E),
+        colorScheme: ColorScheme.dark(
           primary: Color(0xFFE94560),
           secondary: Color(0xFF0F3460),
           surface: Color(0xFF16213E),
         ),
-        appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF16213E)),
+        appBarTheme: AppBarTheme(backgroundColor: Color(0xFF16213E)),
       ),
-      home: const ScanScreen(),
+      home: ScanScreen(),
     );
   }
 }
