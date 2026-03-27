@@ -55,6 +55,7 @@ class _ControlScreenState extends State<ControlScreen> {
           TextButton(
             onPressed: () { car.disconnect(); Navigator.pop(context); },
             child: Text('\u65ad\u5f00', style: TextStyle(color:Color(0xFFF44336))),
+          ),
         ],
       ),
       body: _showLog ? _buildLog(car) : _buildControl(car),
@@ -217,6 +218,7 @@ class _ControlScreenState extends State<ControlScreen> {
           GestureDetector(
             onTap: () => car.logs.clear(),
             child: Text('\u6e05\u9664', style: TextStyle(color:Color(0xFFE94560))),
+          ),
         ]),
       ),
       Expanded(child: car.logs.isEmpty
