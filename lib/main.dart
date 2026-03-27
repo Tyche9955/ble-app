@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           surface: Color(0xFF1E1E1E),
         ),
         appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF1E1E1E), elevation: 0),
-        cardTheme: CardThemeData(color: const Color(0xFF1E1E1E), elevation: 0),
+        cardTheme: CardTheme(color: const Color(0xFF1E1E1E), elevation: 0),
         inputDecorationTheme: InputDecorationTheme(
           filled: true, fillColor: const Color(0xFF2A2A2A),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: BorderSide.none),
