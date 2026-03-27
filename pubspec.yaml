@@ -1,5 +1,5 @@
 name: ble_car
-description: BLE 灏忚溅鎺у埗 APP
+description: BLE小车控制APP
 version: 1.0.0+1
 
 environment:
