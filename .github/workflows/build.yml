@@ -1,4 +1,4 @@
-﻿name: Build BLE App
+name: Build BLE Car
 
 on:
   push:
@@ -10,35 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Java
         uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
+        with: { distribution: temurin, java-version: 17 }
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 3.22.3
-          channel: stable
-
+        with: { flutter-version: 3.22.3, channel: stable }
       - name: Create project
         run: |
-          flutter create --org com.bleapp --project-name ble_app app
+          flutter create --org com.blecar --project-name ble_car app
           cp pubspec.yaml app/pubspec.yaml
           cp lib/*.dart app/lib/
           cp android/app/src/main/AndroidManifest.xml app/android/app/src/main/AndroidManifest.xml
-
       - name: Get dependencies
         run: cd app && flutter pub get
-
       - name: Build APK
         run: cd app && flutter build apk --release --no-tree-shake-icons
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: nRF-BLE-Tool-v2
+          name: BLE-Car-Control
           path: app/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
